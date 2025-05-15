@@ -1,0 +1,16 @@
+name: feartreextractor_env
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pip
+  - numpy
+  # - scipy
+  # - scikit-image
+  - opencv
+  - matplotlib
+  - pandas
+
+  - pip:
+      - git+https://github.com/oncoray/mirp.git@v2.3.2#egg=mirp
+      - aicspylibczi

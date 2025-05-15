@@ -1,0 +1,31 @@
+name: segmentation_env
+channels:
+  - conda-forge
+dependencies:
+  - python=3.9
+  - pip
+  - numpy
+  # - scipy
+  # - scikit-image
+  - opencv
+  - matplotlib
+  - pandas
+
+  # In case when I decide to run cellpose on GPU
+  # - pytorch=1.13.1
+  # - cudatoolkit=11.3
+
+  # Install Java (JDK) for javabridge
+  # - openjdk=8
+  # - maven  # Ensures Java tools work correctly
+
+  - pip:
+      - cellpose
+      - oiffile
+      # - javabridge==1.0.18
+      # - python-bioformats
+
+
+# Set Java environment variable
+# variables:
+#   JAVA_HOME: ${CONDA_PREFIX}/Library
