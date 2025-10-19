@@ -1,45 +1,67 @@
-from pathlib import Path
+
 from dataset_loader import Dataset
 from mirp import extract_features
-import cv2 as cv
 import pandas as pd
 
-from config.config import DATASETS, DATASET_PATHS
+
+from config.config import DATASETS, DATASET_PATHS, feature_extraction_output_loaction
+
+
+import warnings
+warnings.filterwarnings("ignore", message="divide by zero encountered in scalar divide")
+
+
 
 
 if __name__ =="__main__":
 
-    d = Dataset(DATASET_PATHS[DATASETS.SCI_TEST])
+    dataset = DATASETS.YPD_SD_Acetate_DAY_3_Acetate
+
+    d = Dataset(DATASET_PATHS[dataset])
 
 
-    layers = [[],[],[]]
+    features_dataset = []
     for i, scene in enumerate(d.scenes):
         print(f"{i+1}/{len(d.scenes)}")
 
-        gray_imgs = scene.dark
-        masks = scene.mask
+        first_not_None_layer_id = next((i for i, x in enumerate(scene.dark) if x is not None), None)
 
-        for layer_idx in range(len(gray_imgs)):
-            if gray_imgs[layer_idx] is None:
-                continue
+        gray_img = scene.dark[first_not_None_layer_id]
+        img_name = scene.dark_names[first_not_None_layer_id]
 
+        for mask_index, mask in enumerate(scene.masks):
             features = extract_features(
-                image=gray_imgs[layer_idx],
-                mask=masks,
+                image=gray_img,
+                mask=mask,
                 intensity_normalisation="standardisation",
                 base_discretisation_method="fixed_bin_number",
                 base_discretisation_n_bins=32
-            ) 
+            )[0] # single output, [<pandas.DataFrame>], so take out first (and only) element from array
 
-            layers[layer_idx].extend([f.assign(scene_id = scene.scene_id) for f in features])
+            features["img_name"] = img_name
+            features["mask_index"] = mask_index
+
+            features_dataset.append(features)
+    
+    result = pd.concat(features_dataset, ignore_index=True)
 
 
-    for layer_idx in range(len(gray_imgs)):
-        if len(layers[layer_idx]) > 0:
-            result = pd.concat(layers[layer_idx], ignore_index=True)
-        else:
-            result = pd.DataFrame([])
-        result.to_csv(f'outputs/{DATASETS.SCI_TEST.name}_layer_{layer_idx+1}.csv', index=False)  
+    output_loaction = f'{feature_extraction_output_loaction}/{dataset.name}.csv'
+    result.to_csv(output_loaction, index=False)
+
+    print(f"FINISHED, saved to: ={output_loaction}")
+
+        # features_dataset.extend([f.assign(scene_id = scene.scene_id) for f in features])
+
+
+    # result = pd.concat(layers[layer_idx], ignore_index=True)
+
+    # for layer_idx in range(len(gray_imgs)):
+    #     if len(layers[layer_idx]) > 0:
+    #         result = pd.concat(layers[layer_idx], ignore_index=True)
+    #     else:
+    #         result = pd.DataFrame([])
+    #     result.to_csv(f'outputs/{DATASETS.SCI_TEST.name}_layer_{layer_idx+1}.csv', index=False)  
               
 
 

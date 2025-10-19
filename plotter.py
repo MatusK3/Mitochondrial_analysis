@@ -2,6 +2,9 @@ import numpy as np
 from matplotlib import pyplot as plt
 import pandas as pd
 
+from dataset_loader import DATASETS
+
+from feature_loader import load_features
 
 
 # cm, corr - Co-occurrence matrix, Correlation
@@ -12,32 +15,36 @@ import pandas as pd
 # fbn - fixed bin number
 # n32 - bins
 
-x_feature = 'cm_auto_corr_d1_3d_v_mrg_fbn_n32' 
-y_feature = 'ngl_lde_d1_a0.0_3d_fbn_n32'
+# x_feature = 'cm_auto_corr_d1_3d_v_mrg_fbn_n32' 
+# y_feature = 'ngl_lde_d1_a0.0_3d_fbn_n32'
 
 
-location = "outputs"
-layers = ["SCI_TEST_layer_1.csv", "SCI_TEST_layer_2.csv", "SCI_TEST_layer_3.csv"]
-data = [pd.read_csv(location + "/" + layer) for layer in layers]
+classes = [DATASETS.YPD_SD_Acetate_DAY_3_Acetate, DATASETS.YPD_SD_Acetate_DAY_1_Acetate] 
 
-scene_ids = set().union(*(df['scene_id'].unique() for df in data))
-id_colors = {i: np.random.random(3) for i in scene_ids}
+features, labels = load_features(classes)
 
 
-fig, axes = plt.subplots(1, 3, figsize=(18, 6))
-for i, layer_data in enumerate(data):
-    for scene_id, group in layer_data.groupby('scene_id'):
-        axes[i].scatter(
-            group[x_feature], group[y_feature],
-            color=id_colors[scene_id],
-            label=str(scene_id),
-            alpha=0.7
-        )
-    axes[i].set_xlabel(x_feature)
-    axes[i].set_ylabel(y_feature)
-    axes[i].set_title(f"layer:{i}") 
+# from sklearn.feature_selection import SelectKBest, f_classif
+# selector = SelectKBest(score_func=f_classif, k=2)  # choose 2 features
+# selector.fit(features, labels)
 
-# fig.suptitle("Scatter plot") # x_feature vs y_feature
-plt.tight_layout()
+
+# mask = selector.get_support()
+# selected_features = features.columns[mask]
+# print("selected_features:", selected_features)
+
+# selected_features = ('morph_asphericity', 'ih_mode_fbn_n32')
+# selected_features = ('cm_diff_avg_d1_3d_v_mrg_fbn_n32', 'rlm_lre_3d_v_mrg_fbn_n32')
+# selected_features = ('stat_cov', 'cm_info_corr1_d1_3d_v_mrg_fbn_n32')
+selected_features = ('stat_cov', 'rlm_rlnu_norm_3d_v_mrg_fbn_n32')
+
+for i in classes:
+    class_mask = labels == i.name
+    plt.scatter(features[class_mask][selected_features[0]], features[class_mask][selected_features[1]], label=f'{i.name}')
+
+
+plt.xlabel(selected_features[0])
+plt.ylabel(selected_features[1])
 plt.show()
+
 
