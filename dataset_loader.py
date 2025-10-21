@@ -33,7 +33,6 @@ if __name__ =="__main__":
     for scene in d.scenes:
         scene.show_scene()
 
-    
 
     ################### transorm to png"
     # png_dir = "C:/Work/Matfyz/Thesis/data/zeiss_matfyz/magMag 234.85/DiOC6_png"

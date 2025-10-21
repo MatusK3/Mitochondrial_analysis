@@ -10,49 +10,54 @@ from config.config import DATASETS, DATASET_PATHS, feature_extraction_output_loa
 import warnings
 warnings.filterwarnings("ignore", message="divide by zero encountered in scalar divide")
 
-
+from img_preprocess import stadard_preprocess
 
 
 if __name__ =="__main__":
 
-    dataset = DATASETS.YPD_SD_Acetate_DAY_3_Acetate
+    datasets = [DATASETS.YPD_SD_Acetate_DAY_1_Acetate, DATASETS.YPD_SD_Acetate_DAY_3_Acetate]
 
-    d = Dataset(DATASET_PATHS[dataset])
-
-
-    features_dataset = []
-    for i, scene in enumerate(d.scenes):
-        print(f"{i+1}/{len(d.scenes)}")
-
-        first_not_None_layer_id = next((i for i, x in enumerate(scene.dark) if x is not None), None)
-
-        gray_img = scene.dark[first_not_None_layer_id]
-        img_name = scene.dark_names[first_not_None_layer_id]
-
-        for mask_index, mask in enumerate(scene.masks):
-            features = extract_features(
-                image=gray_img,
-                mask=mask,
-                intensity_normalisation="standardisation",
-                base_discretisation_method="fixed_bin_number",
-                base_discretisation_n_bins=32
-            )[0] # single output, [<pandas.DataFrame>], so take out first (and only) element from array
-
-            features["img_name"] = img_name
-            features["mask_index"] = mask_index
-
-            features_dataset.append(features)
-    
-    result = pd.concat(features_dataset, ignore_index=True)
+    for dataset in datasets:
+        d = Dataset(DATASET_PATHS[dataset])
 
 
-    output_loaction = f'{feature_extraction_output_loaction}/{dataset.name}.csv'
-    result.to_csv(output_loaction, index=False)
+        features_dataset = []
+        for i, scene in enumerate(d.scenes):
+            print(f"{dataset.name}; {i+1}/{len(d.scenes)}")
 
-    print(f"FINISHED, saved to: ={output_loaction}")
+            first_not_None_layer_id = next((i for i, x in enumerate(scene.dark) if x is not None), None)
+
+            gray_img = scene.dark[first_not_None_layer_id]
+            img_name = scene.dark_names[first_not_None_layer_id]
+
+
+            for mask_index, mask in enumerate(scene.masks):
+                roi, mask_roi, denoised_img = stadard_preprocess(gray_img, mask)
+
+                features = extract_features(
+                    image=denoised_img,
+                    mask=mask_roi,
+                    intensity_normalisation="standardisation",
+                    base_discretisation_method="fixed_bin_number",
+                    base_discretisation_n_bins=32
+                )[0] # single output, [<pandas.DataFrame>], so take out first (and only) element from array
+
+                features["img_name"] = img_name
+                features["mask_index"] = mask_index
+
+                features_dataset.append(features)
+        
+        result = pd.concat(features_dataset, ignore_index=True)
+
+
+        output_loaction = f'{feature_extraction_output_loaction}/{dataset.name}.csv'
+        result.to_csv(output_loaction, index=False)
+
+        print(f"FINISHED, saved to: ={output_loaction}")
 
         # features_dataset.extend([f.assign(scene_id = scene.scene_id) for f in features])
 
+    print("FINFISH.")
 
     # result = pd.concat(layers[layer_idx], ignore_index=True)
 

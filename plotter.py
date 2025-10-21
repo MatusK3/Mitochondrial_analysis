@@ -1,6 +1,5 @@
 import numpy as np
 from matplotlib import pyplot as plt
-import pandas as pd
 
 from dataset_loader import DATASETS
 
@@ -33,10 +32,16 @@ features, labels = load_features(classes)
 # selected_features = features.columns[mask]
 # print("selected_features:", selected_features)
 
+# un pre processed 
 # selected_features = ('morph_asphericity', 'ih_mode_fbn_n32')
 # selected_features = ('cm_diff_avg_d1_3d_v_mrg_fbn_n32', 'rlm_lre_3d_v_mrg_fbn_n32')
 # selected_features = ('stat_cov', 'cm_info_corr1_d1_3d_v_mrg_fbn_n32')
-selected_features = ('stat_cov', 'rlm_rlnu_norm_3d_v_mrg_fbn_n32')
+# selected_features = ('stat_cov', 'rlm_rlnu_norm_3d_v_mrg_fbn_n32')
+
+# pre processed
+# selected_features = ('cm_joint_max_d1_3d_v_mrg_fbn_n32', 'dzm_z_perc_3d_fbn_n32')
+# selected_features = ('morph_sphericity', 'cm_diff_var_d1_3d_v_mrg_fbn_n32')
+selected_features = ('morph_area_dens_conv_hull', 'rlm_sre_3d_v_mrg_fbn_n32')
 
 for i in classes:
     class_mask = labels == i.name

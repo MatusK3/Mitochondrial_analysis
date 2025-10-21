@@ -28,42 +28,71 @@ def knn(x, k, x_train, y_train, metric='euclidian'):
 
 
 if __name__ =="__main__":
-    classes = [DATASETS.YPD_SD_Acetate_DAY_3_Acetate, DATASETS.YPD_SD_Acetate_DAY_1_Acetate] 
+  classes = [DATASETS.YPD_SD_Acetate_DAY_3_Acetate, DATASETS.YPD_SD_Acetate_DAY_1_Acetate] 
 
 
-    features, labels = load_features(classes)
-    labels = labels.to_numpy()
+  features, labels = load_features(classes)
+  labels = labels.to_numpy()
 
-    # selected_feature_types = ['morph_moran_i', 'morph_geary_c']
-    from itertools import combinations
-    column_pairs = list(combinations(features.columns, 2))
+  # selected_feature_types = ['morph_moran_i', 'morph_geary_c']
+  from itertools import combinations
+  column_pairs = list(combinations(features.columns, 2))
 
-    acc = []
-    for i, selected_feature_types in enumerate(column_pairs):
-        if i % 100 == 0:
-           print(f"{i}/{len(column_pairs)}")
+  acc = []
+  for i, selected_feature_types in enumerate(column_pairs):
+      if i % 100 == 0:
+          print(f"{i}/{len(column_pairs)}")
 
-        selected_features = features.loc[:, selected_feature_types].to_numpy()
-        
+      selected_features = features.loc[:, selected_feature_types].to_numpy()
+      
 
-        # selected_features = selected_features.to_numpy()
+      # selected_features = selected_features.to_numpy()
 
-        
-        num_of_tests = 10
-        acc.append(0)
-        for test_num in range(num_of_tests):
-            x_train, y_train, x_val, y_val, x_test, y_test = split_numpy_data(selected_features, labels, val_percent=0.3, test_percent=0)
+      
+      num_of_tests = 10
+      acc.append(0)
+      for test_num in range(num_of_tests):
+          x_train, y_train, x_val, y_val, x_test, y_test = split_numpy_data(selected_features, labels, val_percent=0.3, test_percent=0)
 
-            k = 3
-            correct = 0
-            for input, target in zip(x_val, y_val):
-                prediction = knn(input, k, x_train, y_train)
-                if prediction == target:
-                    correct += 1
-            acc[-1] += correct / len(x_val)
-        acc[-1] /= num_of_tests
+          k = 3
+          correct = 0
+          for input, target in zip(x_val, y_val):
+              prediction = knn(input, k, x_train, y_train)
+              if prediction == target:
+                  correct += 1
+          acc[-1] += correct / len(x_val)
+      acc[-1] /= num_of_tests
 
-        # print(f"features: {selected_feature_types}; accuracy: {acc[-1]}")
+      # print(f"features: {selected_feature_types}; accuracy: {acc[-1]}")
 
-    best_features_idx = np.argmax(np.array(acc))
-    print(f"best accuracy: {acc[best_features_idx]}; features: {column_pairs[best_features_idx]}")
+  best_features_idx = np.argmax(np.array(acc))
+  print(f"best accuracy: {acc[best_features_idx]}; features: {column_pairs[best_features_idx]}")
+
+
+  acc = np.array(acc)
+  top_9_accs_idxs = np.argpartition(-acc,kth=9)[:9] #-acc, as argpratition returns min
+
+  from matplotlib import pyplot as plt
+
+  fig, axes = plt.subplots(3, 3, figsize=(9, 9))
+  for i, idx in enumerate(top_9_accs_idxs):
+    x_ax, y_ax = i // 3, i % 3
+
+    x_featyre, y_feature = column_pairs[idx]
+
+    for i_class in classes:
+      class_mask = labels == i_class.name
+      axes[x_ax, y_ax].scatter(features[class_mask][x_featyre], features[class_mask][y_feature], label=f'{i_class.name}')
+
+    axes[x_ax, y_ax].set_title(f'acc: {acc[idx]}')
+
+    axes[x_ax, y_ax].set_xlabel(x_featyre)
+    axes[x_ax, y_ax].set_ylabel(y_feature)
+
+  plt.legend()
+  plt.tight_layout()
+  plt.show()
+       
+
+
+    

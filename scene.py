@@ -1,7 +1,7 @@
 import numpy as np
 from numpy import ndarray
 from pathlib import Path
-import cv2 as cv
+import cv2
 from abc import ABC, abstractmethod
 from matplotlib import pyplot as plt
 from aicspylibczi import CziFile
@@ -148,9 +148,18 @@ class SCI_Scene(Scene):
         
         # load segmentation masks
         if segmentation_path is not None:
-            segmentation_file_name = f'{self.light_name.split(".")[0]}.npy'
+            # segmentation_file_name = f'{self.light_name.split(".")[0]}.npy'
+            # masks_file_path =  segmentation_path.joinpath(segmentation_file_name)
+            # self.masks = np.load(masks_file_path, allow_pickle=True)
+            segmentation_file_name = f'{self.light_name.split(".")[0]}.png'
             masks_file_path =  segmentation_path.joinpath(segmentation_file_name)
-            self.masks = np.load(masks_file_path, allow_pickle=True)
+            png_masks = cv2.imread(masks_file_path, cv2.IMREAD_GRAYSCALE)
+            n_channels = 1 + np.max(png_masks)
+            channels = np.eye(n_channels, dtype=bool)[png_masks]
+            channels = np.rollaxis(channels, 2)
+            self.masks = channels[1:]
+            self.background = channels[0]
+
         else:
             self.masks = None
 

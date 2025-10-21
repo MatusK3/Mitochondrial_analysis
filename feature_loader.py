@@ -7,7 +7,8 @@ from config.config import DATASETS, feature_extraction_output_loaction
 def load_features(classes : List[DATASETS]) -> Tuple[pd.DataFrame,  pd.DataFrame]:
     data = []
     for i in classes:
-        path = f"{feature_extraction_output_loaction}/{i.name}.csv"
+        path = f"{feature_extraction_output_loaction}/un_preprocessed/{i.name}.csv"
+        # path = f"{feature_extraction_output_loaction}/{i.name}.csv"
         class_data = pd.read_csv(path)
         class_data["class"] = i.name
         data.append(class_data)
