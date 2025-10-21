@@ -73,13 +73,13 @@ class Scene(ABC):
             x /= np.max(x)
             x *= 255
             x = np.uint8(x)
-            cv.imwrite(location, x)
+            cv2.imwrite(location, x)
 
         if dark:
             for i in range(3):
                 if self.dark[i] is not None:
                     location = dir_path + "/" + name + "_dark_"+ i + ".png"
-                    cv.imwrite(location, self.dark[i])
+                    cv2.imwrite(location, self.dark[i])
 
 
 class OIR_Scene(Scene):
