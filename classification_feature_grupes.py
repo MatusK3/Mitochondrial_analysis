@@ -69,7 +69,7 @@ if __name__ =="__main__":
 # DZM - Distance Zone Matrix
 # IH - Intensity Histogram
 # IVH - Intensity Variance Histogram
-# LOC - Local Binary Pattern
+# LOC - Local intensity features
 # Morph - Morphological Features
 # NGL - Neighbourhood Gray-Level Dependence Matrix
 # NGT - Neighbourhood Gray-Level Texture
@@ -78,15 +78,23 @@ if __name__ =="__main__":
 # SZM - Size Zone Matrix
 
 
-# cm, nf:25, acc:0.5758620689655173
-# dzm, nf:16, acc:0.6839080459770115
-# ih, nf:23, acc:0.5804597701149425
-# ivh, nf:14, acc:0.564367816091954
-# loc, nf:2, acc:0.5367816091954023
-# morph, nf:23, acc:0.5517241379310345
-# ngl, nf:17, acc:0.603448275862069
-# ngt, nf:5, acc:0.632183908045977
-# rlm, nf:16, acc:0.5206896551724138
-# stat, nf:17, acc:0.5367816091954023
-# szm, nf:16, acc:0.6781609195402301
-# best accuracy: 0.6839080459770115; features: dzm
+
+#        Old-------------------------- New----------------------------
+# class  nf     acc                    nf      acc
+# cm,    nf:25, acc:0.5758620689655173 nf:26,  acc:0.5804597701149425
+# dzm,   nf:16, acc:0.6839080459770115 nf:16,  acc:0.48965517241379314
+# ih,    nf:23, acc:0.5804597701149425 nf:23,  acc:0.5333333333333333
+# ivh,   nf:14, acc:0.564367816091954  nf:15,  acc:0.5620689655172414
+# loc,   nf:2,  acc:0.5367816091954023 nf:2,   acc:0.5931034482758621
+# morph, nf:23, acc:0.5517241379310345 nf:27,  acc:0.6252873563218391
+# ngl,   nf:17, acc:0.603448275862069  nf:17,  acc:0.5977011494252873
+# ngt,   nf:5,  acc:0.632183908045977  nf:5,   acc:0.6597701149425287
+# rlm,   nf:16, acc:0.5206896551724138 nf:16,  acc:0.6310344827586206
+# stat,  nf:17, acc:0.5367816091954023 nf:18,  acc:0.5011494252873564
+# szm,   nf:16, acc:0.6781609195402301 nf:16,  acc:0.6873563218390805
+
+
+# filter nf(across all features classes) acc
+# lbp,   nf:154,                         acc:0.4896551724137931
+
+

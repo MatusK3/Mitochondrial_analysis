@@ -38,6 +38,7 @@ if __name__ =="__main__":
   from itertools import combinations
   column_pairs = list(combinations(features.columns, 2))
 
+
   acc = []
   for i, selected_feature_types in enumerate(column_pairs):
       if i % 100 == 0:
@@ -48,7 +49,6 @@ if __name__ =="__main__":
 
       # selected_features = selected_features.to_numpy()
 
-      
       num_of_tests = 10
       acc.append(0)
       for test_num in range(num_of_tests):

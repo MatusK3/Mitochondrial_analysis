@@ -42,8 +42,8 @@ def stadard_preprocess(img, mask):
     roi, mask_roi = get_roi(img, mask)
     roi = get_masked(roi, mask_roi)
     roi = normalize_01(roi)
-    denoised_img = denoise(roi)
-    return roi, mask_roi, denoised_img
+    denoised_roi = denoise(roi)
+    return roi, mask_roi, denoised_roi
 
 
 if __name__ =="__main__":

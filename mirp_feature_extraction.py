@@ -15,6 +15,76 @@ from img_preprocess import stadard_preprocess
 
 if __name__ =="__main__":
 
+    from mirp.settings.generic import SettingsClass
+    from mirp.settings.transformation_parameters import ImageTransformationSettingsClass
+    from mirp.settings.feature_parameters import FeatureExtractionSettingsClass
+    from mirp.settings.resegmentation_parameters import ResegmentationSettingsClass
+    from mirp.settings.perturbation_parameters import ImagePerturbationSettingsClass
+    from mirp.settings.image_processing_parameters import ImagePostProcessingClass
+    from mirp.settings.interpolation_parameters import ImageInterpolationSettingsClass, MaskInterpolationSettingsClass
+    from mirp.settings.general_parameters import GeneralSettingsClass
+    
+    
+    general_settings = GeneralSettingsClass(
+        by_slice=True,
+        ibsi_compliant=False # LBP are not in IBSI
+    )
+
+    # No image interpolation needed for 2D
+    image_interpolation_settings = ImageInterpolationSettingsClass(
+        by_slice=general_settings.by_slice,
+        new_spacing=None  # keep original spacing
+    )
+
+    # Feature extraction parameters
+    feature_computation_parameters = FeatureExtractionSettingsClass(
+        by_slice=general_settings.by_slice,
+        ibsi_compliant=general_settings.ibsi_compliant,
+        no_approximation=True,
+        base_feature_families="all",  # compute all radiomics families
+        base_discretisation_method="fixed_bin_number",
+        base_discretisation_n_bins=32,
+        # base_discretisation_bin_width=None,
+        glcm_distance=[1.0],
+        glcm_spatial_method=["2d_average"],
+        glrlm_spatial_method=["2d_average"],
+        glszm_spatial_method=["2d"],
+        gldzm_spatial_method=["2d"],
+        ngtdm_spatial_method=["2d"],
+        ngldm_distance=[1.0],
+        ngldm_spatial_method=["2d"],
+        # ngldm_difference_level=[0.0]
+    )
+
+    image_transformation_settings = ImageTransformationSettingsClass(
+        by_slice=general_settings.by_slice,
+        ibsi_compliant=general_settings.ibsi_compliant,
+
+        response_map_feature_families="all",
+        response_map_discretisation_method="fixed_bin_number",
+        response_map_discretisation_n_bins=32,
+
+        # filter_kernels=["mean", "lbp"],
+        # mean_filter_kernel_size = 3,
+        filter_kernels=["lbp"],
+        lbp_method=["rotation_invariant"],
+        lbp_filter_distance=[1],
+    )
+
+    settings = SettingsClass(
+        general_settings=general_settings,
+        post_process_settings=ImagePostProcessingClass(),
+        img_interpolate_settings=image_interpolation_settings,
+        roi_interpolate_settings=MaskInterpolationSettingsClass(),
+        roi_resegment_settings=None,  # no resegmentation
+        perturbation_settings=None,   # no perturbation
+        img_transform_settings=image_transformation_settings,
+        feature_extr_settings=feature_computation_parameters
+    )
+    
+
+
+
     datasets = [DATASETS.YPD_SD_Acetate_DAY_1_Acetate, DATASETS.YPD_SD_Acetate_DAY_3_Acetate]
 
     for dataset in datasets:
@@ -32,21 +102,20 @@ if __name__ =="__main__":
 
 
             for mask_index, mask in enumerate(scene.masks):
-                roi, mask_roi, denoised_img = stadard_preprocess(gray_img, mask)
+                roi, mask_roi, denoised_roi = stadard_preprocess(gray_img, mask)
 
                 features = extract_features(
-                    image=denoised_img,
+                    image=denoised_roi,
                     mask=mask_roi,
                     intensity_normalisation="standardisation",
-                    base_discretisation_method="fixed_bin_number",
-                    base_discretisation_n_bins=32
+                    settings=settings
                 )[0] # single output, [<pandas.DataFrame>], so take out first (and only) element from array
 
                 features["img_name"] = img_name
                 features["mask_index"] = mask_index
 
                 features_dataset.append(features)
-        
+
         result = pd.concat(features_dataset, ignore_index=True)
 
 
