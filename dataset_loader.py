@@ -27,11 +27,15 @@ class Dataset():
 
 
 if __name__ =="__main__":
-    d = Dataset(DATASET_PATHS[DATASETS.YPD_SD_Acetate_DAY_1_Acetate])
+    d = Dataset(DATASET_PATHS[DATASETS.YPD_SD_Acetate_DAY_3_YPD])
 
 
     for scene in d.scenes:
+        print(np.min(scene.light), np.max(scene.light))
+        print(np.min(scene.dark[0]), np.max(scene.dark[0]))
+        print(scene.light.dtype, scene.light.shape)
         scene.show_scene()
+        
 
 
     ################### transorm to png"

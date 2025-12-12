@@ -172,3 +172,10 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+brute_force_2_features.csv
+brute_force_3_features.csv
+bf_Acetate_SD_YPD_D1_D3_2_features.csv
+bf_Acetate_SD_YPD_D1_D3_3_features.csv
+
+outputs/
+visual/

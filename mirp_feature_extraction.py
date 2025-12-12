@@ -5,12 +5,12 @@ import pandas as pd
 
 
 from config.config import DATASETS, DATASET_PATHS, feature_extraction_output_loaction
-
+from img_preprocess import stadard_preprocess
 
 import warnings
 warnings.filterwarnings("ignore", message="divide by zero encountered in scalar divide")
 
-from img_preprocess import stadard_preprocess
+
 
 
 if __name__ =="__main__":
@@ -85,7 +85,14 @@ if __name__ =="__main__":
 
 
 
-    datasets = [DATASETS.YPD_SD_Acetate_DAY_1_Acetate, DATASETS.YPD_SD_Acetate_DAY_3_Acetate]
+    datasets = [
+        # DATASETS.YPD_SD_Acetate_DAY_1_Acetate, 
+        # DATASETS.YPD_SD_Acetate_DAY_3_Acetate,
+        # DATASETS.YPD_SD_Acetate_DAY_1_SD,
+        # DATASETS.YPD_SD_Acetate_DAY_3_SD,
+        # DATASETS.YPD_SD_Acetate_DAY_1_YPD,
+        DATASETS.YPD_SD_Acetate_DAY_3_YPD,
+    ]
 
     for dataset in datasets:
         d = Dataset(DATASET_PATHS[dataset])

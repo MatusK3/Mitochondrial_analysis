@@ -28,19 +28,20 @@ if __name__ =="__main__":
     # location = Path("C:/Work/Matfyz/Thesis/data/zeiss_matfyz/magMag 234.85/YPD_Acetate/Day 1/YPD1%")
     # location = Path("C:\Work\Matfyz\Thesis\data\zeiss_matfyz\magMag 234.85\YPD_SD_Acetate\Day 1\Acetate")
     # location = Path("C:\Work\Matfyz\Thesis\data\zeiss_matfyz\magMag 234.85\YPD_SD_Acetate\Day 1\SD")
-    location = Path("C:\Work\Matfyz\Thesis\data\zeiss_matfyz\magMag 234.85\YPD_SD_Acetate\Day 3\Acetate")
+    # location = Path("C:\Work\Matfyz\Thesis\data\zeiss_matfyz\magMag 234.85\YPD_SD_Acetate\Day 3\SD")
+    location = Path("C:\Work\Matfyz\Thesis\data\zeiss_matfyz\magMag 234.85\YPD_SD_Acetate\Day 3\YPD")
     files = os.listdir(location)
 
 
 
     for file in files:
-        # print(file)
+        print(file)
 
-        img_path = location.joinpath(file)
-        sci_file = CziFile(img_path)
-        img = _get_img(sci_file)
+        # img_path = location.joinpath(file)
+        # sci_file = CziFile(img_path)
+        # img = _get_img(sci_file)
 
-        plt.imshow(img, cmap='gray')
-        plt.title(file)
-        plt.tight_layout()
-        plt.show()
+        # plt.imshow(img, cmap='gray')
+        # plt.title(file)
+        # plt.tight_layout()
+        # plt.show()

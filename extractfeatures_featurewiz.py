@@ -8,8 +8,12 @@ from featurewiz import FeatureWiz
 
 
 if __name__ =="__main__":
-    classes = [DATASETS.YPD_SD_Acetate_DAY_3_Acetate, DATASETS.YPD_SD_Acetate_DAY_1_Acetate] 
-
+    # classes = [DATASETS.YPD_SD_Acetate_DAY_3_Acetate, DATASETS.YPD_SD_Acetate_DAY_1_Acetate] 
+    classes = [
+        DATASETS.YPD_SD_Acetate_DAY_1_Acetate, DATASETS.YPD_SD_Acetate_DAY_3_Acetate,
+        DATASETS.YPD_SD_Acetate_DAY_1_SD,      DATASETS.YPD_SD_Acetate_DAY_3_SD,
+        DATASETS.YPD_SD_Acetate_DAY_1_YPD,     DATASETS.YPD_SD_Acetate_DAY_3_YPD,
+    ]
 
     dataset, labels = load_features(classes)
     x_train, y_train, x_val, y_val, x_test, y_test = split_pandas_data(dataset, labels, val_percent=0.3, test_percent=0)

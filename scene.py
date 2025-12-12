@@ -61,12 +61,10 @@ class Scene(ABC):
         plt.tight_layout()
         plt.show()
 
-    def save_to_png(self, dir_path, light=True, dark=False):
-        name = self.light_name.split(".")[0]
-        
+    def save_to_png(self, dir_path, light=True, dark=False): 
         if light:
+            name = self.light_name.split(".")[0]
             location = dir_path + "/" + name + ".png"
-
 
             x = self.light.astype(np.float32)
             x -= np.min(x)
@@ -74,12 +72,23 @@ class Scene(ABC):
             x *= 255
             x = np.uint8(x)
             cv2.imwrite(location, x)
+            print(f"saved {location}")
 
         if dark:
             for i in range(3):
                 if self.dark[i] is not None:
-                    location = dir_path + "/" + name + "_dark_"+ i + ".png"
-                    cv2.imwrite(location, self.dark[i])
+                    name = self.dark_names[i].split(".")[0]
+                    location = dir_path + "/" + name + ".png"
+
+                    x = self.dark[i].astype(np.float32)
+                    x -= np.min(x)
+                    x /= np.max(x)
+                    x *= 255
+                    x = np.uint8(x)
+                    bgr = np.zeros((x.shape[0], x.shape[1], 3), dtype=x.dtype)
+                    bgr[:,:,1] = x
+                    cv2.imwrite(location, bgr)
+                    print(f"saved {location}")
 
 
 class OIR_Scene(Scene):
@@ -154,6 +163,10 @@ class SCI_Scene(Scene):
             segmentation_file_name = f'{self.light_name.split(".")[0]}.png'
             masks_file_path =  segmentation_path.joinpath(segmentation_file_name)
             png_masks = cv2.imread(masks_file_path, cv2.IMREAD_GRAYSCALE)
+            if png_masks is None:
+                self.masks = None
+                return
+            
             n_channels = 1 + np.max(png_masks)
             channels = np.eye(n_channels, dtype=bool)[png_masks]
             channels = np.rollaxis(channels, 2)

@@ -19,12 +19,14 @@ def get_roi(img, mask):
 def get_masked(img, mask):
     return np.where(mask, img, 0)
 
-def normalize_01(img):
-    img = np.astype(img, np.float32)
-    img -= np.min(img)
-    img /= np.max(img)
+def normalize_01(img: np.ndarray, mask):
+    img = img.astype(np.float32)
+    masked_data = img[mask]
 
-    return img
+    # norm_img = (img - masked_data.mean()) / masked_data.std()
+    norm_img = (img - masked_data.min()) / (masked_data.max() - masked_data.min())
+
+    return norm_img
 
 def denoise(gray_img):
     img_bgr = cv2.cvtColor(gray_img, cv2.COLOR_GRAY2BGR)
@@ -41,7 +43,7 @@ def denoise(gray_img):
 def stadard_preprocess(img, mask):
     roi, mask_roi = get_roi(img, mask)
     roi = get_masked(roi, mask_roi)
-    roi = normalize_01(roi)
+    roi = normalize_01(roi, mask_roi)
     denoised_roi = denoise(roi)
     return roi, mask_roi, denoised_roi
 
@@ -66,7 +68,7 @@ if __name__ =="__main__":
 
             roi, mask_roi = get_roi(gray_img, mask)
             roi = get_masked(roi, mask_roi)
-            roi = normalize_01(roi)
+            roi = normalize_01(roi, mask_roi)
 
             axes[1, 0].imshow(roi, cmap='gray')
             axes[1, 0].set_title(f'normd roi')
