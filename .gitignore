@@ -1,0 +1,25 @@
+*.pdf
+*.czi
+*.csv
+*.png
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# snakemake stuff
+/.snakemake/
+
+# dataset, large .csi files
+/data/mito/img/
+/data/mito/mask/
+!/data/mito/mito.csv
+
+# large .csv files
+/results/
+!/results/features/notes.txt
+!/results/cells_expl/*.png
+
+

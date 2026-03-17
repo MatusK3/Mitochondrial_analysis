@@ -1,0 +1,32 @@
+{
+    "envs": ["Acetate", "SD", "YPD", "YPGly", "YPGal"],
+    "class_to_int_mapping": {
+        "Neutral": 0, "SD_D3": 1, "YPD_D3": 2, "YPGly_D3": 3, "YPGal_D3": 4
+    },
+    
+    "Acetate":{
+        "classes": ["Acetate_DAY1", "Acetate_DAY3"],
+        "class_mapping" : {"Acetate_DAY1": "Neutral", "Acetate_DAY3": "Neutral"},
+        "class_to_int_mapping": {"Neutral": 0}
+    },
+    "SD": {
+        "classes": ["SD_DAY1", "SD_DAY3"],
+        "class_mapping" : {"SD_DAY1": "Neutral", "SD_DAY3": "SD_D3"},
+        "class_to_int_mapping": {"Neutral": 0, "SD_D3": 1}
+    },
+    "YPD":{
+        "classes": ["YPD_DAY1", "YPD_DAY3", "YPD", "YPD%1_DAY1", "YPD%1_DAY3"],
+        "class_mapping" : {"YPD_DAY1": "Neutral","YPD_DAY3": "YPD_D3","YPD": "Neutral","YPD%1_DAY1": "Neutral","YPD%1_DAY2": "YPD_D2","YPD%1_DAY3": "YPD_D3"},
+        "class_to_int_mapping": {"Neutral": 0, "YPD_D3": 1}
+    },
+    "YPGly": {
+        "classes": ["YPGly", "YPGly_DAY1", "YPGly_DAY3"],
+        "class_mapping" : {"YPGly": "Neutral","YPGly_DAY1": "Neutral","YPGly_DAY3": "YPGly_D3"},
+        "class_to_int_mapping": {"Neutral": 0, "YPGly_D3": 1}
+    },
+    "YPGal": {
+        "classes": ["YPGal", "YPGal_DAY1", "YPGal_DAY3"],
+        "class_mapping" : {"YPGal": "Neutral","YPGal_DAY1": "Neutral", "YPGal_DAY3": "YPGal_D3"},
+        "class_to_int_mapping": {"Neutral": 0, "YPGal_D3": 1}
+    }
+}

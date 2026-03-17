@@ -1,0 +1,36 @@
+{
+    "envs": ["Acetate", "SD", "YPD", "YPGly", "YPGal"],
+    "class_to_int_mapping": {
+        "Acetate_D1": 0, "Acetate_D3": 1,
+        "SD_D1": 2, "SD_D3": 3,
+        "YPD_D1": 4, "YPD_D2": 5, "YPD_D3": 6,
+        "YPGly_D1": 7, "YPGly_D2": 8, "YPGly_D3": 9,
+        "YPGal_D1": 10, "YPGal_D2": 11, "YPGal_D3": 12
+    },
+    
+    "Acetate":{
+        "classes": ["Acetate_DAY1", "Acetate_DAY3"],
+        "class_mapping" : {"Acetate_DAY1": "Acetate_D1", "Acetate_DAY3": "Acetate_D3"},
+        "class_to_int_mapping": {"Acetate_D1": 0, "Acetate_D3": 1}
+    },
+    "SD": {
+        "classes": ["SD_DAY1", "SD_DAY3"],
+        "class_mapping" : {"SD_DAY1": "SD_D1", "SD_DAY3": "SD_D3"},
+        "class_to_int_mapping": {"SD_D1": 0, "SD_D3": 1}
+    },
+    "YPD":{
+        "classes": ["YPD_DAY1", "YPD_DAY3", "YPD", "YPD%1_DAY1", "YPD%1_DAY2", "YPD%1_DAY3"],
+        "class_mapping" : {"YPD_DAY1": "YPD_D1","YPD_DAY3": "YPD_D3","YPD": "YPD_D1","YPD%1_DAY1": "YPD_D1","YPD%1_DAY2": "YPD_D2","YPD%1_DAY3": "YPD_D3"},
+        "class_to_int_mapping": {"YPD_D1": 0, "YPD_D2": 1, "YPD_D3": 2}
+    },
+    "YPGly": {
+        "classes": ["YPGly", "YPGly_DAY1", "YPGly_DAY2", "YPGly_DAY3"],
+        "class_mapping" : {"YPGly": "YPGly_D1","YPGly_DAY1": "YPGly_D1","YPGly_DAY2": "YPGly_D2","YPGly_DAY3": "YPGly_D3"},
+        "class_to_int_mapping": {"YPGly_D1": 0, "YPGly_D2": 1, "YPGly_D3": 2}
+    },
+    "YPGal": {
+        "classes": ["YPGal", "YPGal_DAY1", "YPGal_DAY2", "YPGal_DAY3"],
+        "class_mapping" : {"YPGal": "YPGal_D1","YPGal_DAY1": "YPGal_D1","YPGal_DAY2": "YPGal_D2","YPGal_DAY3": "YPGal_D3"},
+        "class_to_int_mapping": {"YPGal_D1": 0, "YPGal_D2": 1, "YPGal_D3": 2}
+    }
+}
